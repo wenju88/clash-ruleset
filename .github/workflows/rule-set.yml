@@ -51,6 +51,12 @@ jobs:
           cat ./tmp/temp-networktest.txt > ./publish/networktest.yaml
           rm -f ./tmp/temp-networktest.txt
 
+      - name: Generate google-cn
+        env:
+          SED: sed '/googleapis.cn/d'
+        run: |
+          curl -sSL https://rules.kr328.app/google@cn.yaml | ${{ env.SED }} > ./publish/google-cn.yaml
+
       - name: Move files
         run: |
           rm -rf ./tmp
