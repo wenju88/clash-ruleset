@@ -38,7 +38,7 @@ jobs:
           curl -sSL https://gitea.com/XIU2/TrackersListCollection/raw/branch/master/all.txt | ${{ env.SED1 }} > ./tmp/temp-tracker.txt
           curl -sSL https://gitea.com/XIU2/TrackersListCollection/raw/branch/master/all.txt | ${{ env.SED2 }} >> ./tmp/temp-tracker.txt
           curl -sSL https://gitea.com/XIU2/TrackersListCollection/raw/branch/master/all.txt | ${{ env.SED3 }} >> ./tmp/temp-tracker.txt
-          sort ./tmp/temp-tracker.txt | uniq -i > ./publish/tracker.yaml
+          cat ./tmp/temp-tracker.txt > ./publish/tracker.yaml
           rm -f ./tmp/temp-tracker.txt
 
       - name: Generate networktest
@@ -47,7 +47,7 @@ jobs:
         run: |
           curl -sSL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Speedtest/Speedtest.yaml > ./tmp/temp-networktest.txt
           curl -sSL https://raw.githubusercontent.com/DustinWin/clash-geosite/master/Rule-Files/network.txt | ${{ env.SED }} >> ./tmp/temp-networktest.txt
-          sort ./tmp/temp-networktest.txt | uniq -i > ./publish/networktest.yaml
+          cat ./tmp/temp-networktest.txt > ./publish/networktest.yaml
           rm -f ./tmp/temp-networktest.txt
 
       - name: Move files
