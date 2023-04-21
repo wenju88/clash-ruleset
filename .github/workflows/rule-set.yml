@@ -44,16 +44,16 @@ jobs:
         env:
           SED1: sed 's/keyword/  - DOMAIN-KEYWORD/g'
         run: |
-          curl -sSL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Speedtest/Speedtest.yaml > ./tmp/temp-networdtest.txt
-          curl -sSL https://raw.githubusercontent.com/DustinWin/clash-geosite/master/Rule-Files/network.txt | ${{ env.SED }} >> ./tmp/temp-networdtest.txt
+          curl -sSL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Speedtest/Speedtest.yaml > ./tmp/temp-networktest.txt
+          curl -sSL https://raw.githubusercontent.com/DustinWin/clash-geosite/master/Rule-Files/network.txt | ${{ env.SED }} >> ./tmp/temp-networktest.txt
 
       - name: Move files
         run: |
           mkdir -p ./publish
           cat ./tmp/temp-tracker.txt > ./publish/tracker.yaml
-          cat ./tmp/temp-networdtest.txt > ./publish/networdtest.yaml
+          cat ./tmp/temp-networktest.txt > ./publish/networktest.yaml
           rm -f ./tmp/temp-tracker.txt
-          rm -f ./tmp/temp-networdtest.txt
+          rm -f ./tmp/temp-networktest.txt
           cp ./tmp/* ./publish
           rm -rf ./tmp
           cd ./publish || exit 1
