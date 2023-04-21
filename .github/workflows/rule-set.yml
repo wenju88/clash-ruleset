@@ -52,7 +52,8 @@ jobs:
           mkdir -p ./publish
           cat ./tmp/temp-tracker.txt > ./publish/tracker.yaml
           cat ./tmp/temp-networdtest.txt > ./publish/networdtest.yaml
-          rm -f ./tmp/temp*
+          rm -f ./tmp/temp-tracker.txt
+          rm -f ./tmp/temp-networdtest.txt
           cp ./tmp/* ./publish
           rm -rf ./tmp
           cd ./publish || exit 1
