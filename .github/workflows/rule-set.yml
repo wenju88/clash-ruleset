@@ -29,16 +29,14 @@ jobs:
 
       - name: Generate tracker
         env:
-          SED1: sed '1i\payload:'
-          SED2: grep -i "\.[A-Z]" | sed 's/^.*\/\///g' | sed 's/:.*\/.*//g' | sed 's/^/  - DOMAIN,/'
-          SED3: grep "\/[0-9].[0-9].[0-9].[0-9]" | sed 's/^.*\/\///g' | sed 's/:.*\/.*//g' | sed 's/^/  - IP-CIDR,/' | sed 's/$/\/32/'
-          SED4: grep "\/\[[0-9]" | sed 's/^.*\/\/\[//g' | sed 's/]:.*\/.*//g' | sed 's/^/  - IP-CIDR6,/' | sed 's/$/\/128/'
+          SED1: grep -i "\.[A-Z]" | sed 's/^.*\/\///g' | sed 's/:.*\/.*//g' | sed 's/^/  - DOMAIN,/' | sed '1i\payload:'
+          SED2: grep "\/[0-9].[0-9].[0-9].[0-9]" | sed 's/^.*\/\///g' | sed 's/:.*\/.*//g' | sed 's/^/  - IP-CIDR,/' | sed 's/$/\/32/'
+          SED3: grep "\/\[[0-9]" | sed 's/^.*\/\/\[//g' | sed 's/]:.*\/.*//g' | sed 's/^/  - IP-CIDR6,/' | sed 's/$/\/128/'
         run: |
           mkdir -p ./tmp
           curl -sSL https://gitea.com/XIU2/TrackersListCollection/raw/branch/master/all.txt | ${{ env.SED1 }} > ./tmp/temp-tracker.txt
           curl -sSL https://gitea.com/XIU2/TrackersListCollection/raw/branch/master/all.txt | ${{ env.SED2 }} >> ./tmp/temp-tracker.txt
           curl -sSL https://gitea.com/XIU2/TrackersListCollection/raw/branch/master/all.txt | ${{ env.SED3 }} >> ./tmp/temp-tracker.txt
-          curl -sSL https://gitea.com/XIU2/TrackersListCollection/raw/branch/master/all.txt | ${{ env.SED4 }} >> ./tmp/temp-tracker.txt
 
       - name: Generate networktest
         env:
@@ -52,6 +50,8 @@ jobs:
           mkdir -p ./publish
           cat ./tmp/temp-tracker.txt > ./publish/tracker.yaml
           cat ./tmp/temp-networktest.txt > ./publish/networktest.yaml
+          rm -f ./publish/temp-tracker.txt
+          rm -f ./publish/temp-networktest.txt
           cp ./tmp/* ./publish
           rm -rf ./tmp
           cd ./publish || exit 1
