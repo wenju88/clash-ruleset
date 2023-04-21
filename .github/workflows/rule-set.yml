@@ -1,0 +1,83 @@
+name: Build rule-set
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 19 * * *"
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - "**/README.md"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout codebase
+        uses: actions/checkout@v3
+
+      - uses: dev-drprasad/delete-tag-and-release@v1.0
+        with:
+          tag_name: latest
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          delete_release: true
+          repo: DustinWin/clash-ruleset
+
+      - name: Generate tracker
+        env:
+          SED1: sed '1i\payload:'
+          SED2: grep -i "\.[A-Z]" | sed 's/^.*\/\///g' | sed 's/:.*\/.*//g' | sed 's/^/  - DOMAIN,/'
+          SED3: grep "\/[0-9].[0-9].[0-9].[0-9]" | sed 's/^.*\/\///g' | sed 's/:.*\/.*//g' | sed 's/^/  - IP-CIDR,/' | sed 's/$/\/32/'
+          SED4: grep "\/\[[0-9]" | sed 's/^.*\/\/\[//g' | sed 's/]:.*\/.*//g' | sed 's/^/  - IP-CIDR6,/' | sed 's/$/\/128/'
+        run: |
+          mkdir -p ./tmp
+          curl -sSL https://gitea.com/XIU2/TrackersListCollection/raw/branch/master/all.txt | ${{ env.SED1 }} > ./tmp/temp-tracker.txt
+          curl -sSL https://gitea.com/XIU2/TrackersListCollection/raw/branch/master/all.txt | ${{ env.SED2 }} >> ./tmp/temp-tracker.txt
+          curl -sSL https://gitea.com/XIU2/TrackersListCollection/raw/branch/master/all.txt | ${{ env.SED3 }} >> ./tmp/temp-tracker.txt
+          curl -sSL https://gitea.com/XIU2/TrackersListCollection/raw/branch/master/all.txt | ${{ env.SED4 }} >> ./tmp/temp-tracker.txt
+
+      - name: Generate networktest
+        env:
+          SED1: sed 's/keyword/  - DOMAIN-KEYWORD/g'
+        run: |
+          curl -sSL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Speedtest/Speedtest.yaml > ./tmp/temp-networdtest.txt
+          curl -sSL https://raw.githubusercontent.com/DustinWin/clash-geosite/master/Rule-Files/network.txt | ${{ env.SED }} >> ./tmp/temp-networdtest.txt
+
+      - name: Move files
+        run: |
+          mkdir -p ./publish
+          cat ./tmp/temp-tracker.txt > ./publish/tracker.yaml
+          cat ./tmp/temp-networdtest.txt > ./publish/networdtest.yaml
+          rm -rf ./tmp
+          cd ./publish || exit 1
+
+      - name: Release and upload assets
+        uses: softprops/action-gh-release@v0.1.6
+        with:
+          name: latest
+          tag_name: latest
+          draft: false
+          prerelease: false
+          files: |
+            ./publish/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Git push assets to "release" branch
+        run: |
+          cd ./publish || exit 1
+          git init
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b release
+          git add .
+          git commit -m "${{ env.RELEASE_NAME }}"
+          git remote add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
+          git push -f -u origin release
+
+      - name: Purge jsdelivr CDN
+        run: |
+          cd ./publish || exit 1
+          for file in $(ls); do
+            curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@release/${file}"
+          done
