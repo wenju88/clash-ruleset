@@ -53,7 +53,7 @@ jobs:
 
       - name: Generate google-cn
         env:
-          SED: sed '/^\s*#/d' | sed '/^$/d' | sed '/googleapis.cn/d'
+          SED: sed '/^\s*#/d' | sed '/^$/d' | sed '/googleapis.cn/d' | sed 's/^- "/  - "/g'
         run: |
           curl -sSL https://rules.kr328.app/google@cn.yaml | ${{ env.SED }} > ./publish/google-cn.yaml
 
