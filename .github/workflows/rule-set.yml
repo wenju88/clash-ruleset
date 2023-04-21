@@ -23,6 +23,10 @@ jobs:
           delete_release: true
           repo: DustinWin/clash-ruleset
 
+      - name: Set variables
+        run: |
+          echo "RELEASE_NAME=Released on $(date +%Y%m%d%H%M)" >> $GITHUB_ENV
+
       - name: Generate tracker
         env:
           SED1: sed '1i\payload:'
