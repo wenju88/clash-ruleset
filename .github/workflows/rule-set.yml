@@ -57,6 +57,17 @@ jobs:
         run: |
           curl -sSL https://rules.kr328.app/google@cn.yaml | ${{ env.SED }} > ./publish/google-cn.yaml
 
+      - name: Put together user.yaml
+        env:
+          SED: sed 's/^/    - /'
+        run: |
+          curl -sSL https://raw.githubusercontent.com/DustinWin/clash-geosite/master/UserConfig/front-user.yaml > ./tmp/temp-user.txt
+          curl -sSL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/NTPService/NTPService.list | sed '/^\s*#/d' | sed 's/DOMAIN-SUFFIX,//g' | ${{ env.SED }} >> ./tmp/temp-user.txt
+          curl -sSL https://raw.githubusercontent.com/XIU2/TrackersListCollection/master/all.txt | grep -i '\.[A-Z]' | sed 's/^.*\/\///g' | sed 's/:.*\/.*//g' | ${{ env.SED }} >> ./tmp/temp-user.txt
+          curl -sSL https://raw.githubusercontent.com/DustinWin/clash-geosite/master/UserConfig/later-user.yaml >> ./tmp/temp-user.txt
+          cat ./tmp/temp-user.txt > ./publish/user.yaml
+          rm -f ./tmp/temp-user.txt
+
       - name: Move files
         run: |
           rm -rf ./tmp
