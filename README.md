@@ -34,7 +34,29 @@ proxy-groups:
     proxies:
       - 🎯 全球直连
 
+  - name: ⛔️ 广告域名
+    type: select
+    proxies:
+      - 🛑 全球拦截
+
+  - name: 🎯 全球直连
+    type: select
+    proxies:
+      - DIRECT
+
+  - name: 🛑 全球拦截
+    type: select
+    proxies:
+      - REJECT
+
 rule-providers:
+  advertising:
+    type: http
+    behavior: classical
+    url: "https://fastly.jsdelivr.net/gh/DustinWin/clash-ruleset@release/advertising.yaml"
+    path: ./ruleset/advertising.yaml
+    interval: 86400
+
   tracker:
     type: http
     behavior: classical
@@ -57,6 +79,7 @@ rule-providers:
     interval: 86400
 
 rules:
+  - RULE-SET,advertising,⛔️ 广告域名
   - RULE-SET,tracker,⛓️ BT 下载
   - RULE-SET,networktest,📈 网络测试
   - RULE-SET,google-cn,🗽 Google 中国
