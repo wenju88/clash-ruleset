@@ -1,10 +1,11 @@
 # 自定义 rule-set
 # 一、 说明
-1. 每天早上 3 点（北京时间）自动构建生成 tracker.yaml、networktest.yaml、google-cn.yaml 和 user.yaml
-2. tracker.yaml 源采用 [TrackersList](https://trackerslist.com)（all.txt）
-3. networktest.yaml 源采用 [blackmatrix7/ios_rule_script/Speedtest](https://github.com/blackmatrix7/ios_rule_script/tree/master/rule/Clash/Speedtest) 和 [IPv6 测试网站](https://github.com/DustinWin/clash-geosite/blob/master/Rule-Files/network.txt)组合
-4. google-cn.yaml 源采用 [rules.kr328.app/google@cn](https://rules.kr328.app/google@cn.yaml)（删除 `'+.googleapis.cn'`，以免直连时出现 [Google Play Store](https://play.google.com/store) 无法下载或升级应用的问题）
-5. user.yaml  
+1. 每天早上 3 点（北京时间）自动构建生成 advertising.yaml、tracker.yaml、networktest.yaml、google-cn.yaml 和 user.yaml
+2. advertising.yaml 源采用 [blackmatrix7/ios_rule_script/AdvertisingLite](https://github.com/blackmatrix7/ios_rule_script/tree/master/rule/Clash/AdvertisingLite)、[blackmatrix7/ios_rule_script/Hijacking](https://github.com/blackmatrix7/ios_rule_script/tree/master/rule/Clash/Hijacking) 和 [blackmatrix7/ios_rule_script/Privacy](https://github.com/blackmatrix7/ios_rule_script/tree/master/rule/Clash/Privacy) 组合
+3. tracker.yaml 源采用 [TrackersList](https://trackerslist.com)（all.txt）
+4. networktest.yaml 源采用 [blackmatrix7/ios_rule_script/Speedtest](https://github.com/blackmatrix7/ios_rule_script/tree/master/rule/Clash/Speedtest) 和 [IPv6 测试网站](https://github.com/DustinWin/clash-geosite/blob/master/Rule-Files/network.txt)组合
+5. google-cn.yaml 源采用 [rules.kr328.app/google@cn](https://rules.kr328.app/google@cn.yaml)（删除 `'+.googleapis.cn'`，以免直连时出现 [Google Play Store](https://play.google.com/store) 无法下载或升级应用的问题）
+6. user.yaml  
 ① 若想自己生成配置文件 user.yaml，可以 [Fork 本项目](https://github.com/DustinWin/clash-ruleset/fork)后编辑 *.github/workflows/run.yml* 内的 `name: Put together user.yaml` 部分和 *UserConfig* 目录下的.yaml 文件  
 ② 编辑 *MyConfig/later-user.yaml* 文件，将 `nameserver` 中的`🪜 代理域名`改成可以访问外网的代理组名，或者直接将 `'https://dns.google/dns-query#🪜 代理域名'`修改为 `tls://dns.google`  
 ③ 添加 [NTP 服务](https://github.com/blackmatrix7/ios_rule_script/tree/master/rule/Clash/NTPService)到 user.yaml 内的 `fake-ip-filter` 中，防止校时失败  
