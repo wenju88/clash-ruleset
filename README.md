@@ -50,11 +50,11 @@ proxy-groups:
       - REJECT
 
 rule-providers:
-  advertising:
+  reject:
     type: http
     behavior: classical
     url: "https://fastly.jsdelivr.net/gh/DustinWin/clash-ruleset@release/advertising.yaml"
-    path: ./ruleset/advertising.yaml
+    path: ./ruleset/reject.yaml
     interval: 86400
 
   tracker:
@@ -79,7 +79,7 @@ rule-providers:
     interval: 86400
 
 rules:
-  - RULE-SET,advertising,⛔️ 广告域名
+  - RULE-SET,reject,⛔️ 广告域名
   - RULE-SET,tracker,⛓️ BT 下载
   - RULE-SET,networktest,📈 网络测试
   - RULE-SET,google-cn,🗽 Google 中国
