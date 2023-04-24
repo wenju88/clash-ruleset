@@ -1,7 +1,7 @@
 # 自定义 rule-set
 # 一、 说明
-1. 每天早上 3 点（北京时间）自动构建生成 advertising.yaml、tracker.yaml、networktest.yaml、google-cn.yaml 和 user.yaml
-2. advertising.yaml 源采用 [blackmatrix7/ios_rule_script/AdvertisingLite](https://github.com/blackmatrix7/ios_rule_script/tree/master/rule/Clash/AdvertisingLite)、[blackmatrix7/ios_rule_script/Hijacking](https://github.com/blackmatrix7/ios_rule_script/tree/master/rule/Clash/Hijacking) 和 [blackmatrix7/ios_rule_script/Privacy](https://github.com/blackmatrix7/ios_rule_script/tree/master/rule/Clash/Privacy) 组合
+1. 每天早上 3 点（北京时间）自动构建生成 reject.yaml、tracker.yaml、networktest.yaml、google-cn.yaml 和 user.yaml
+2. reject.yaml 源采用 [blackmatrix7/ios_rule_script/AdvertisingLite](https://github.com/blackmatrix7/ios_rule_script/tree/master/rule/Clash/AdvertisingLite)、[blackmatrix7/ios_rule_script/Hijacking](https://github.com/blackmatrix7/ios_rule_script/tree/master/rule/Clash/Hijacking) 和 [blackmatrix7/ios_rule_script/Privacy](https://github.com/blackmatrix7/ios_rule_script/tree/master/rule/Clash/Privacy) 组合
 3. tracker.yaml 源采用 [TrackersList](https://trackerslist.com)（all.txt）
 4. networktest.yaml 源采用 [blackmatrix7/ios_rule_script/Speedtest](https://github.com/blackmatrix7/ios_rule_script/tree/master/rule/Clash/Speedtest) 和 [IPv6 测试网站](https://github.com/DustinWin/clash-geosite/blob/master/Rule-Files/network.txt)组合
 5. google-cn.yaml 源采用 [rules.kr328.app/google@cn](https://rules.kr328.app/google@cn.yaml)（删除 `'+.googleapis.cn'`，以免直连时出现 [Google Play Store](https://play.google.com/store) 无法下载或升级应用的问题）
@@ -53,7 +53,7 @@ rule-providers:
   reject:
     type: http
     behavior: classical
-    url: "https://fastly.jsdelivr.net/gh/DustinWin/clash-ruleset@release/advertising.yaml"
+    url: "https://fastly.jsdelivr.net/gh/DustinWin/clash-ruleset@release/reject.yaml"
     path: ./ruleset/reject.yaml
     interval: 86400
 
